@@ -9,18 +9,18 @@
     $("notice").hidden = false; return;
   }
 
-  // ფოტოს შეკუმშვა: მაქს. 600px სიგანე, JPEG. ინახება პირდაპირ ბაზაში, Storage არ სჭირდება.
+  // ფოტოს შეკუმშვა: მაქს. 1000px სიგანე, JPEG. ინახება პირდაპირ ბაზაში, Storage არ სჭირდება.
   function compress(file) {
     return new Promise((resolve, reject) => {
       const img = new Image();
       const url = URL.createObjectURL(file);
       img.onload = () => {
-        const w = Math.min(600, img.width), h = Math.round(img.height * w / img.width);
+        const w = Math.min(1000, img.width), h = Math.round(img.height * w / img.width);
         const c = document.createElement("canvas"); c.width = w; c.height = h;
-        c.getContext("2d").drawImage(img, 0, 0, w, h);
+        const g = c.getContext("2d"); g.imageSmoothingQuality = "high"; g.drawImage(img, 0, 0, w, h);
         URL.revokeObjectURL(url);
-        let q = 0.8, data = c.toDataURL("image/jpeg", q);
-        while (data.length > 600000 && q > 0.3) { q -= 0.1; data = c.toDataURL("image/jpeg", q); }
+        let q = 0.88, data = c.toDataURL("image/jpeg", q);
+        while (data.length > 720000 && q > 0.3) { q -= 0.1; data = c.toDataURL("image/jpeg", q); }
         resolve(data);
       };
       img.onerror = () => reject(new Error("ფოტოს წაკითხვა ვერ მოხერხდა"));
@@ -49,7 +49,7 @@
         reviewAuthor: $("reviewAuthor").value.trim(),
         content: $("content").value.trim(),
         imageUrl,
-        createdAt: firebase.firestore.Timestamp.fromDate(new Date($("date").value))
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
       form.reset(); say("post-msg", "გამოქვეყნდა.", "ok");
     } catch (err) {
