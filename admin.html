@@ -26,19 +26,23 @@
   </form>
 
   <form id="post-form" class="form" hidden>
-    <h1>ახალი პოსტი</h1>
+    <h1 id="form-title">ახალი პოსტი</h1>
     <label>წიგნის სათაური<input id="title" required></label>
     <label>წიგნის ავტორი<input id="bookAuthor" required></label>
     <label>ანალიზის ავტორი<input id="reviewAuthor" required></label>
-    <label>გამოქვეყნების თარიღი<input type="date" id="date" required></label>
     <label>სრული ანალიზი<textarea id="content" rows="12" required></textarea></label>
-    <label>წიგნის გარეკანი<input type="file" id="cover" accept="image/*" required></label>
+    <label><span id="cover-label">წიგნის გარეკანი</span><input type="file" id="cover" accept="image/*" required></label>
     <div class="row">
       <button type="submit" id="publish">გამოქვეყნება</button>
+      <button type="button" id="cancel-edit" class="ghost" hidden>გაუქმება</button>
       <button type="button" id="logout" class="ghost">გამოსვლა</button>
     </div>
     <p class="msg" id="post-msg" role="status"></p>
   </form>
+  <section id="manage" class="manage" hidden>
+    <h2>ჩემი პოსტები</h2>
+    <div id="manage-list"></div>
+  </section>
 </main>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
