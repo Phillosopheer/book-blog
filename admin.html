@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ადმინ პანელი — წიგნების ბლოგი</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Georgian:wght@400;500;600;700&family=Noto+Serif+Georgian:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="index.html">წიგნების ბლოგი</a>
+  <nav><a href="index.html">მთავარი</a><a href="admin.html" aria-current="page">ადმინი</a></nav>
+</header>
+<main class="narrow">
+  <p id="notice" class="notice" hidden>Firebase ჯერ არ არის დაკავშირებული. შეავსე js/firebase-config.js.</p>
+
+  <form id="login" class="form" hidden>
+    <h1>შესვლა</h1>
+    <label>ელფოსტა<input type="email" id="email" required autocomplete="username"></label>
+    <label>პაროლი<input type="password" id="password" required autocomplete="current-password"></label>
+    <button type="submit">შესვლა</button>
+    <p class="msg" id="login-msg" role="alert"></p>
+  </form>
+
+  <form id="post-form" class="form" hidden>
+    <h1>ახალი პოსტი</h1>
+    <label>წიგნის სათაური<input id="title" required></label>
+    <label>წიგნის ავტორი<input id="bookAuthor" required></label>
+    <label>ანალიზის ავტორი<input id="reviewAuthor" required></label>
+    <label>გამოქვეყნების თარიღი<input type="date" id="date" required></label>
+    <label>სრული ანალიზი<textarea id="content" rows="12" required></textarea></label>
+    <label>წიგნის გარეკანი<input type="file" id="cover" accept="image/*" required></label>
+    <div class="row">
+      <button type="submit" id="publish">გამოქვეყნება</button>
+      <button type="button" id="logout" class="ghost">გამოსვლა</button>
+    </div>
+    <p class="msg" id="post-msg" role="status"></p>
+  </form>
+</main>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
