@@ -1,12 +1,11 @@
-// აქ ჩასვი შენი Firebase კონფიგურაცია
-// (Firebase Console → Project settings → Your apps → Web app)
+// Firebase-ის კონფიგურაცია (პროექტი: book-blog)
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyBG7sUkoIrceV_c030berUi5RH0SAQ-QDo",
+  authDomain: "filmebis-ganxilva.firebaseapp.com",
+  projectId: "filmebis-ganxilva",
+  storageBucket: "filmebis-ganxilva.firebasestorage.app",
+  messagingSenderId: "1031829944576",
+  appId: "1:1031829944576:web:cab91fdd0290690f381be5"
 };
 
 const configured = !firebaseConfig.apiKey.startsWith("YOUR_");
