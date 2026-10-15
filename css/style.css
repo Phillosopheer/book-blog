@@ -80,3 +80,21 @@ textarea{font-family:var(--serif);line-height:1.7;resize:vertical}
   dialog[open]{animation:pop .18s ease-out}
   @keyframes pop{from{opacity:0;transform:translateY(8px)}}
 }
+
+/* ძიება */
+.search{display:block;width:100%;max-width:26rem;margin:0 0 1rem;padding:.75rem 1rem;font-size:1rem;border-radius:999px;background:#fff}
+.search:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px rgba(63,91,74,.18)}
+@media (max-width:42rem){.search{max-width:none}}
+
+/* ადმინი: პოსტების მართვა */
+.manage{margin-top:3rem;border-top:1px solid var(--line);padding-top:1.5rem}
+.manage h2{font:600 1.35rem var(--serif);margin:0 0 1rem}
+.item{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.75rem 1rem;padding:.9rem 0;border-bottom:1px solid var(--line)}
+.item-info{min-width:0;flex:1 1 14rem}
+.item-info strong{display:block;font-family:var(--serif);font-size:1.05rem;line-height:1.4}
+.item-info span{color:var(--muted);font-size:.875rem}
+.item-actions{display:flex;gap:.5rem}
+.item-actions button{padding:.5rem 1rem;min-height:2.5rem;font-size:.9rem}
+button.danger{background:transparent;color:#9B2C2C;border-color:#D9B4B4}
+button.danger:hover{background:#9B2C2C;color:#fff;filter:none}
+@media (max-width:42rem){.item-actions{width:100%}.item-actions button{flex:1}}
