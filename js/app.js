@@ -3,6 +3,7 @@ const list = document.getElementById("posts");
 const modal = document.getElementById("modal");
 const body = document.getElementById("modal-body");
 const search = document.getElementById("search");
+const sug = document.getElementById("suggest");
 
 const months = ["იანვარი","თებერვალი","მარტი","აპრილი","მაისი","ივნისი","ივლისი","აგვისტო","სექტემბერი","ოქტომბერი","ნოემბერი","დეკემბერი"];
 const fmt = d => `${d.getDate()} ${months[d.getMonth()]}, ${d.getFullYear()}`;
@@ -80,13 +81,50 @@ document.getElementById("close").onclick = () => modal.close();
 modal.addEventListener("click", e => { if (e.target === modal) modal.close(); });
 
 let all = [];
+const match = q => p => `${p.title} ${p.bookAuthor} ${p.reviewAuthor}`.toLowerCase().includes(q);
 function render() {
   const q = search.value.trim().toLowerCase();
-  const f = q ? all.filter(p => `${p.title} ${p.bookAuthor} ${p.reviewAuthor}`.toLowerCase().includes(q)) : all;
+  const f = q ? all.filter(match(q)) : all;
   list.replaceChildren(...(f.length ? f.map(card)
     : [el("p", "empty", all.length ? "ვერაფერი მოიძებნა." : "პოსტები ჯერ არ არის დამატებული.")]));
 }
-search.addEventListener("input", render);
+
+// ჩამოშლადი შედეგები ძიების ველის ქვეშ
+let shown = [], active = -1;
+function closeSug() { sug.hidden = true; search.setAttribute("aria-expanded", "false"); active = -1; }
+function mark() {
+  sug.querySelectorAll(".sg").forEach((b, i) => {
+    b.setAttribute("aria-selected", String(i === active));
+    if (i === active) b.scrollIntoView({ block: "nearest" });
+  });
+}
+function suggest() {
+  const q = search.value.trim().toLowerCase();
+  active = -1;
+  if (!q) { sug.replaceChildren(); closeSug(); return; }
+  shown = all.filter(match(q)).slice(0, 6);
+  if (!shown.length) { sug.replaceChildren(el("li", "sg-empty", "ვერაფერი მოიძებნა.")); }
+  else sug.replaceChildren(...shown.map(p => {
+    const li = el("li"); li.setAttribute("role", "option");
+    const b = el("button", "sg"); b.type = "button"; b.tabIndex = -1;
+    let th;
+    if (p.thumb) { th = el("img"); th.src = p.thumb; th.alt = ""; } else th = el("span", "sgph", p.title.charAt(0));
+    const t = el("span", "sgt"); t.append(el("strong", "", p.title), el("small", "", p.bookAuthor));
+    b.append(th, t);
+    b.onclick = () => { closeSug(); open(p); };
+    li.append(b); return li;
+  }));
+  sug.hidden = false; search.setAttribute("aria-expanded", "true");
+}
+search.addEventListener("input", () => { render(); suggest(); });
+search.addEventListener("focus", suggest);
+search.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeSug();
+  else if (e.key === "ArrowDown" && shown.length) { e.preventDefault(); active = Math.min(active + 1, shown.length - 1); mark(); }
+  else if (e.key === "ArrowUp" && shown.length) { e.preventDefault(); active = Math.max(active - 1, 0); mark(); }
+  else if (e.key === "Enter") { if (active >= 0) { e.preventDefault(); const p = shown[active]; closeSug(); open(p); } else closeSug(); }
+});
+document.addEventListener("click", e => { if (!e.target.closest(".searchbox")) closeSug(); });
 
 if (!configured) {
   document.getElementById("notice").hidden = false;
