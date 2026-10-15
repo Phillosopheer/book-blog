@@ -9,6 +9,25 @@
     $("notice").hidden = false; return;
   }
 
+  // ფოტოს შეკუმშვა: მაქს. 600px სიგანე, JPEG. ინახება პირდაპირ ბაზაში, Storage არ სჭირდება.
+  function compress(file) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.onload = () => {
+        const w = Math.min(600, img.width), h = Math.round(img.height * w / img.width);
+        const c = document.createElement("canvas"); c.width = w; c.height = h;
+        c.getContext("2d").drawImage(img, 0, 0, w, h);
+        URL.revokeObjectURL(url);
+        let q = 0.8, data = c.toDataURL("image/jpeg", q);
+        while (data.length > 600000 && q > 0.3) { q -= 0.1; data = c.toDataURL("image/jpeg", q); }
+        resolve(data);
+      };
+      img.onerror = () => reject(new Error("ფოტოს წაკითხვა ვერ მოხერხდა"));
+      img.src = url;
+    });
+  }
+
   auth.onAuthStateChanged(user => { login.hidden = !!user; form.hidden = !user; });
 
   login.addEventListener("submit", async e => {
@@ -23,15 +42,13 @@
     e.preventDefault();
     const btn = $("publish"); btn.disabled = true; say("post-msg", "იტვირთება…");
     try {
-      const file = $("cover").files[0];
-      const r = storage.ref(`covers/${Date.now()}-${file.name}`);
-      await r.put(file);
+      const imageUrl = await compress($("cover").files[0]);
       await db.collection("posts").add({
         title: $("title").value.trim(),
         bookAuthor: $("bookAuthor").value.trim(),
         reviewAuthor: $("reviewAuthor").value.trim(),
         content: $("content").value.trim(),
-        imageUrl: await r.getDownloadURL(),
+        imageUrl,
         createdAt: firebase.firestore.Timestamp.fromDate(new Date($("date").value))
       });
       form.reset(); say("post-msg", "გამოქვეყნდა.", "ok");
