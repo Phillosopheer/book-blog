@@ -12,7 +12,10 @@
 <body>
 <header class="top">
   <a class="brand" href="index.html">წიგნების ბლოგი</a>
-  <input type="search" id="search" class="search" placeholder="მოძებნე წიგნი ან ავტორი…" aria-label="წიგნების ძიება" autocomplete="off">
+  <div class="searchbox">
+    <input type="search" id="search" class="search" placeholder="მოძებნე წიგნი ან ავტორი…" aria-label="წიგნების ძიება" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="suggest">
+    <ul id="suggest" class="suggest" role="listbox" hidden></ul>
+  </div>
   <nav><a href="index.html" aria-current="page">მთავარი</a><a href="admin.html">ადმინი</a></nav>
 </header>
 <main>
