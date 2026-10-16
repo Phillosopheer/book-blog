@@ -1,11 +1,40 @@
-// Firebase Console → Firestore → Rules
-// ჩაანაცვლე ADMIN_UID შენი მომხმარებლის UID-ით (Authentication → Users)
+// Firebase Console → Firestore Database → Rules
+// ადმინის UID: Authentication → Users
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null
+          && request.auth.uid == "QJPFNraToOTgQg1807xiZZF70l33";
+    }
+
+    // ბარათის მონაცემები
     match /posts/{id} {
       allow read: if true;
-      allow write: if request.auth != null && request.auth.uid == "ADMIN_UID";
+      allow create, update: if isAdmin()
+        && request.resource.data.keys().hasOnly(['title','bookAuthor','reviewAuthor','preview','thumb','createdAt'])
+        && request.resource.data.title is string && request.resource.data.title.size() <= 300
+        && request.resource.data.bookAuthor is string && request.resource.data.bookAuthor.size() <= 200
+        && request.resource.data.reviewAuthor is string && request.resource.data.reviewAuthor.size() <= 200
+        && request.resource.data.preview is string && request.resource.data.preview.size() <= 300
+        && request.resource.data.thumb is string && request.resource.data.thumb.size() <= 200000;
+      allow delete: if isAdmin();
+    }
+
+    // სრული ტექსტი და დიდი გარეკანი
+    match /postBodies/{id} {
+      allow read: if true;
+      allow create, update: if isAdmin()
+        && request.resource.data.keys().hasOnly(['content','imageUrl'])
+        && request.resource.data.content is string && request.resource.data.content.size() <= 100000
+        && request.resource.data.imageUrl is string && request.resource.data.imageUrl.size() <= 800000;
+      allow delete: if isAdmin();
+    }
+
+    // დანარჩენი ყველაფერი დაკეტილია
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }
