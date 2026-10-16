@@ -61,9 +61,26 @@
 
 წაკითხვა: ყველა. ჩაწერა: მხოლოდ ადმინის UID `QJPFNraToOTgQg1807xiZZF70l33`, ორივე კოლექციაზე (`posts`, `postBodies`). ტექსტი ფაილშია: `firestore.rules`. `storage.rules` ახლა საჭირო არ არის, რადგან Storage არ გამოიყენება.
 
+## დაცვა
+
+**კოდში (GitHub-ზე):**
+- `vercel.json`: უსაფრთხოების ჰედერები (CSP, X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy, HSTS); `admin.html` ძიებიდან დაფარულია
+- `admin.html`: `noindex` მეტა-თეგი
+- `firestore.rules`: წაკითხვა ყველას, ჩაწერა მხოლოდ ადმინის UID-ს + ველებისა და ზომის შემოწმება; დანარჩენი ყველაფერი დაკეტილია
+- `storage.rules`: ყველაფერი დაკეტილია (Storage არ გამოიყენება)
+
+**Firebase Console-ში (ხელით):**
+- [ ] Firestore → Rules: ჩასვი `firestore.rules`-ის ტექსტი და დააჭირე Publish
+- [ ] Authentication → Settings → User actions: გამორთე „Enable create (sign-up)“
+- [ ] Authentication → Settings → Authorized domains: დატოვე მხოლოდ `localhost` და `wignebisganxilva.vercel.app`
+- [ ] Google Cloud Console → APIs & Services → Credentials → Browser key → Application restrictions: HTTP referrers → `https://wignebisganxilva.vercel.app/*`
+- [ ] ადმინის პაროლი: გრძელი და უნიკალური (მინ. 14 სიმბოლო)
+- [ ] GitHub: ჩართე 2FA და მთავარი ფილიალის დაცვა
+
 ## ფაილები
 
 ```
+vercel.json             უსაფრთხოების ჰედერები
 index.html              მთავარი გვერდი (ძიება სათაურში)
 admin.html              ადმინ პანელი
 css/style.css           დიზაინი
