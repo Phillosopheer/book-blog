@@ -44,13 +44,18 @@ dialog::backdrop{background:rgba(44,44,44,.5)}
 dialog article{padding:clamp(1.5rem,4vw,2.5rem);position:relative}
 dialog h2{font:600 clamp(1.4rem,3.5vw,1.9rem)/1.3 var(--serif);margin:0 0 .25rem}
 .mhead{display:grid;grid-template-columns:clamp(8rem,22vw,11rem) 1fr;gap:1.5rem;align-items:start;margin-bottom:1.75rem}
-.full p{font-family:var(--serif);font-size:1.075rem;line-height:1.9;max-width:40rem;margin:0 0 1.2rem}
+.full{max-width:40rem}
+.full,.rt-area{font-family:var(--serif);font-size:1.075rem;line-height:1.9}
+.full p,.full div,.rt-area p,.rt-area div{margin:0 0 1.2rem}
+.full h1,.full h2,.full h3,.full h4,.rt-area h1,.rt-area h2,.rt-area h3,.rt-area h4{font:600 1.4rem/1.4 var(--serif);margin:1.5rem 0 .8rem}
+.full ul,.full ol,.rt-area ul,.rt-area ol{margin:0 0 1.2rem;padding-left:1.6rem}
+.full blockquote,.rt-area blockquote{margin:0 0 1.2rem;padding:.1rem 0 .1rem 1.1rem;border-left:3px solid var(--accent);color:var(--muted)}
 .close{position:sticky;top:0;float:right;margin:.35rem .35rem 0 0;z-index:2;background:var(--bg);color:var(--ink);border:0;font-size:1.9rem;line-height:1;width:2.75rem;height:2.75rem;padding:0;border-radius:50%}
 
 /* ფორმა */
 .form{display:grid;gap:1.1rem}
 .form h1{font:600 1.6rem var(--serif);margin:0 0 .5rem}
-label{display:grid;gap:.35rem;font-weight:500;font-size:.95rem}
+label,.field{display:grid;gap:.35rem;font-weight:500;font-size:.95rem}
 input,textarea{font:400 1rem var(--sans);color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:3px;padding:.7rem .8rem;width:100%;min-height:2.75rem}
 textarea{font-family:var(--serif);line-height:1.7;resize:vertical}
 .row{display:flex;flex-wrap:wrap;gap:.75rem}
@@ -109,3 +114,22 @@ textarea{font-family:var(--serif);line-height:1.7;resize:vertical}
 button.danger{background:transparent;color:#9B2C2C;border-color:#D9B4B4}
 button.danger:hover{background:#9B2C2C;color:#fff;filter:none}
 @media (max-width:42rem){.item-actions{width:100%}.item-actions button{flex:1}}
+
+/* ტექსტის რედაქტორი (ადმინი) */
+.rt{background:#fff;border:1px solid var(--line);border-radius:3px}
+.rt:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(63,91,74,.18)}
+.rt-area{padding:.8rem 1rem;min-height:18rem;max-height:75vh;overflow:auto;resize:vertical;font-weight:400;outline:none}
+.rt-area:focus-visible{outline:none}
+.hint{color:var(--muted);font-weight:400;font-size:.85rem}
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:.3rem;padding:.45rem;border-bottom:1px solid var(--line);background:var(--paper);--rt-fore:#2c2c2c;--rt-back:#fff3a3}
+.toolbar button{min-width:2.25rem;min-height:2.25rem;padding:.2rem .5rem;display:inline-grid;place-items:center;background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:3px;font:500 .95rem var(--sans)}
+.toolbar button:hover{filter:none;background:var(--bg);border-color:var(--accent)}
+.toolbar button.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.toolbar select{font:400 .9rem var(--sans);min-height:2.25rem;padding:.2rem .4rem;border:1px solid var(--line);border-radius:3px;background:#fff;color:var(--ink);cursor:pointer}
+.toolbar .sep{width:1px;align-self:stretch;margin:.2rem .15rem;background:var(--line)}
+.tb-color{position:relative;display:inline-grid;place-items:center;width:2.25rem;height:2.25rem;background:#fff;border:1px solid var(--line);border-radius:3px;cursor:pointer}
+.tb-color:hover{border-color:var(--accent)}
+.tb-color input{position:absolute;inset:0;width:100%;height:100%;min-height:0;padding:0;border:0;opacity:0;cursor:pointer}
+.tb-a{font:700 1rem/1 var(--sans);padding:.1rem .25rem .2rem;pointer-events:none}
+.tb-fore{border-bottom:4px solid var(--rt-fore)}
+.tb-back{background:var(--rt-back);border-radius:2px}
