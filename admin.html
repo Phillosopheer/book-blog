@@ -49,8 +49,14 @@
             <option value="2rem">სათაური</option>
             <option value="2.6rem">დიდი სათაური</option>
           </select>
-          <span class="tb-color" title="ტექსტის ფერი"><span class="tb-a tb-fore">A</span><input type="color" id="rt-fore" value="#2c2c2c" aria-label="ტექსტის ფერი"></span>
-          <span class="tb-color" title="ტექსტის მონიშვნა (ფონის ფერი)"><span class="tb-a tb-back">A</span><input type="color" id="rt-back" value="#fff3a3" aria-label="ფონის ფერი"></span>
+          <span class="tb-pal" data-pal="foreColor" data-var="--rt-fore">
+            <button type="button" class="tb-btn" title="ტექსტის ფერი" aria-label="ტექსტის ფერი" aria-haspopup="true"><span class="tb-a tb-fore">A</span></button>
+            <div class="palette" hidden></div>
+          </span>
+          <span class="tb-pal" data-pal="hiliteColor" data-var="--rt-back">
+            <button type="button" class="tb-btn" title="ტექსტის მონიშვნა (ფონის ფერი)" aria-label="ფონის ფერი" aria-haspopup="true"><span class="tb-a tb-back">A</span></button>
+            <div class="palette" hidden></div>
+          </span>
           <span class="sep"></span>
           <button type="button" data-cmd="justifyLeft" title="მარცხნივ" aria-label="მარცხნივ"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 10h12M3 14h18M3 18h12"/></svg></button>
           <button type="button" data-cmd="justifyCenter" title="ცენტრში" aria-label="ცენტრში"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M6 10h12M3 14h18M6 18h12"/></svg></button>
@@ -65,7 +71,7 @@
         </div>
         <div id="content" class="rt-area" contenteditable="true" role="textbox" aria-multiline="true" aria-labelledby="content-label" lang="ka"><p><br></p></div>
       </div>
-      <small class="hint">მონიშნე ტექსტი და აირჩიე ფორმატი. ჩასმისას ტექსტი უბრალოდ ჩაჯდება, ფორმატირება შემდეგ დაამატე.</small>
+      <small class="hint">მონიშნე ტექსტი და აირჩიე ფორმატი (ფერიც და ზომაც მონიშნულ ტექსტზე მუშაობს). ჩასმისას ტექსტი უბრალოდ ჩაჯდება, ფორმატირება შემდეგ დაამატე.</small>
     </div>
     <label><span id="cover-label">წიგნის გარეკანი</span><input type="file" id="cover" accept="image/*" required></label>
     <div class="row">
