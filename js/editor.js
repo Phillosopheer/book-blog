@@ -62,18 +62,40 @@
     });
   });
 
-  // ფერები: ტექსტის და მონიშვნის (ფონის)
-  function colorTool(id, cmd) {
-    const inp = document.getElementById(id);
-    inp.addEventListener("input", () => bar.style.setProperty("--" + id, inp.value));
-    inp.addEventListener("change", () => run(() => {
+  // ფერები: ჩვენივე პალიტრა (მონიშვნა არ იკარგება) + "სხვა ფერი"
+  const TEXT = ["#2C2C2C", "#000000", "#9B2C2C", "#D9480F", "#B7791F", "#2F855A", "#3F5B4A", "#2B6CB0", "#6B46C1", "#B83280", "#6B6860", "#FFFFFF"];
+  const BACK = ["#FFF3A3", "#FFD6D6", "#FFE3C2", "#D6F5E3", "#D6E8FF", "#EBDDFF", "#E2DED3", "#F4F1EA", "#FFFF00", "#00FF00", "#00FFFF", "transparent"];
+  const pals = bar.querySelectorAll(".tb-pal");
+  const closePals = () => pals.forEach(p => { p.querySelector(".palette").hidden = true; });
+  function applyColor(cmd, val) {
+    run(() => {
       exec("styleWithCSS", true);
-      if (cmd === "hiliteColor" && !exec(cmd, inp.value)) exec("backColor", inp.value);
-      else if (cmd !== "hiliteColor") exec(cmd, inp.value);
-    }));
+      if (cmd === "hiliteColor") { if (!exec("hiliteColor", val)) exec("backColor", val); }
+      else exec("foreColor", val);
+    });
   }
-  colorTool("rt-fore", "foreColor");
-  colorTool("rt-back", "hiliteColor");
+  pals.forEach(p => {
+    const cmd = p.dataset.pal, pal = p.querySelector(".palette");
+    (cmd === "foreColor" ? TEXT : BACK).forEach(c => {
+      const b = document.createElement("button");
+      b.type = "button"; b.dataset.color = c; b.title = c === "transparent" ? "ფონის მოხსნა" : c;
+      b.setAttribute("aria-label", b.title);
+      b.style.background = c === "transparent" ? "linear-gradient(135deg,#fff 45%,#9B2C2C 45%,#9B2C2C 55%,#fff 55%)" : c; // CSSOM (CSP-სთან თავსებადი)
+      pal.appendChild(b);
+    });
+    const custom = document.createElement("label"); custom.className = "custom";
+    const inp = document.createElement("input"); inp.type = "color"; inp.value = cmd === "foreColor" ? "#2c2c2c" : "#fff3a3";
+    custom.append(inp, document.createTextNode(" სხვა ფერი")); pal.appendChild(custom);
+    const done = val => {
+      applyColor(cmd, val); closePals();
+      if (val !== "transparent") bar.style.setProperty(p.dataset.var, val);
+    };
+    p.querySelector(".tb-btn").addEventListener("click", () => { const open = pal.hidden; closePals(); pal.hidden = !open; });
+    pal.addEventListener("click", e => { const b = e.target.closest("button[data-color]"); if (b) done(b.dataset.color); });
+    inp.addEventListener("change", () => done(inp.value));
+  });
+  document.addEventListener("click", e => { if (!e.target.closest(".tb-pal")) closePals(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") closePals(); });
 
   // ჩასმისას მხოლოდ ტექსტი (Word-ის/საიტების ზედმეტი ფორმატირების გარეშე)
   ed.addEventListener("paste", e => {
