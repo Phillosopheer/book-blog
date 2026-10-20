@@ -42,7 +42,7 @@
     $("cover-label").textContent = isEdit ? "ახალი გარეკანი (თუ არ ცვლი, დატოვე ცარიელი)" : "წიგნის გარეკანი";
   }
 
-  function exitEdit() { editing = null; form.reset(); setMode(false); say("post-msg", ""); }
+  function exitEdit() { editing = null; form.reset(); RTEditor.clear(); setMode(false); say("post-msg", ""); }
 
   async function startEdit(id) {
     say("post-msg", "იტვირთება…");
@@ -53,7 +53,7 @@
       const b = bd.exists ? bd.data() : { content: x.content || "", imageUrl: x.imageUrl || "" };
       editing = { id, createdAt: x.createdAt, thumb: x.thumb ?? x.imageUrl ?? "", imageUrl: b.imageUrl || x.thumb || "" };
       $("title").value = x.title; $("bookAuthor").value = x.bookAuthor;
-      $("reviewAuthor").value = x.reviewAuthor; $("content").value = b.content;
+      $("reviewAuthor").value = x.reviewAuthor; RTEditor.setContent(b.content);
       $("cover").value = "";
       setMode(true); say("post-msg", "");
       form.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -120,14 +120,16 @@
           compress(file, 520, 0.8, 90000)
         ]);
       }
-      const content = $("content").value.trim();
+      if (RTEditor.isEmpty()) { say("post-msg", "ანალიზის ტექსტი ცარიელია.", "err"); btn.disabled = false; return; }
+      const content = RTEditor.getHTML();
+      if (content.length > 100000) { say("post-msg", "ტექსტი ზედმეტად გრძელია (ლიმიტი ~100 000 სიმბოლო ფორმატირებასთან ერთად).", "err"); btn.disabled = false; return; }
       const ref = db.collection("posts").doc(editing ? editing.id : undefined);
       const batch = db.batch();
       batch.set(ref, {
         title: $("title").value.trim(),
         bookAuthor: $("bookAuthor").value.trim(),
         reviewAuthor: $("reviewAuthor").value.trim(),
-        preview: content.replace(/\s+/g, " ").slice(0, 220),
+        preview: RTEditor.getText().slice(0, 220),
         thumb,
         createdAt: editing ? editing.createdAt : firebase.firestore.FieldValue.serverTimestamp()
       });
