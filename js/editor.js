@@ -69,9 +69,13 @@
   const closePals = () => pals.forEach(p => { p.querySelector(".palette").hidden = true; });
   function applyColor(cmd, val) {
     run(() => {
-      exec("styleWithCSS", true);
-      if (cmd === "hiliteColor") { if (!exec("hiliteColor", val)) exec("backColor", val); }
-      else exec("foreColor", val);
+      if (cmd === "hiliteColor") {
+        exec("styleWithCSS", true);
+        if (!exec("hiliteColor", val)) exec("backColor", val);
+      } else {
+        exec("styleWithCSS", false); // <font color="..."> ატრიბუტი: CSP-ს არ ეხება, ამიტომ ფერი მაშინვე ჩანს
+        exec("foreColor", val);
+      }
     });
   }
   pals.forEach(p => {
