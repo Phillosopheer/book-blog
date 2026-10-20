@@ -72,7 +72,8 @@ async function open(p) {
   const head = el("div", "mhead");
   head.append(cover(p, f.imageUrl || p.thumb), meta(p, "h2"));
   const full = el("div", "full");
-  f.content.split(/\n{2,}/).forEach(par => full.append(el("p", "", par.trim())));
+  if (RT.isHtml(f.content)) full.append(RT.clean(f.content)); // ფორმატირებული პოსტი (გასუფთავებული)
+  else f.content.split(/\n{2,}/).forEach(par => full.append(el("p", "", par.trim()))); // ძველი, უბრალო ტექსტი
   body.replaceChildren(head, full);
   modal.scrollTop = 0;
 }
